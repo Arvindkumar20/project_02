@@ -1,39 +1,40 @@
-import PlaceList from "../components/PlaceList";
-import { useParams} from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
-const DUMMY_PLACES=[{
-  id: 'p1',
-  title: 'Fort of Raja Mahmoodabad',
-  description: 'Best Location in Mahmudabad for Visit historical place',
-  imageUrl: 'https://lh3.googleusercontent.com/p/AF1QipPg-dYbMo-dJsaHvhJco_Any3OjKLlDE4oKOVAe=w592-h404-n-k-no-v2-rj',
-  address: 'Mahmudabad, Uttar Pradesh 261203',
-  location: {
-    lat: 27.2949703,
-    lng: 81.1165455
+import PlaceList from '../components/PlaceList';
+
+const DUMMY_PLACES = [
+  {
+    id: 'p1',
+    title: 'Empire State Building',
+    description: 'One of the most famous sky scrapers in the world!',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
+    address: '20 W 34th St, New York, NY 10001',
+    location: {
+      lat: 40.7484405,
+      lng: -73.9878584
     },
     creator: 'u1'
+  },
+  {
+    id: 'p2',
+    title: 'Husainabad Clock Tower',
+    description: 'One of the most famous sky scrapers in the world!',
+    imageUrl:
+      'https://d2dzi65yjecjnt.cloudfront.net/1176384.jpeg',
+    address: 'Girdharilal Mathur Rd, Telibagh, Lucknow, Uttar Pradesh 226003 · 9.7 km',
+    location: {
+      lat: 26.9272441,
+      lng: 80.9725626
     },
-    {
-      id: 'p2',
-      title: 'Roman Catholic Church',
-      description: 'A historic Roman Catholic Church located at the heart of Lucknow, Hazrat Ganj. Highly encourage you to visit.',
-      imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-o/0f/0c/ac/e0/cathedral-senior-school.jpg',
-      address: 'Hazratgunj, Lucknow, Uttar Pradesh 226001',
-      location: {
-        lat: 26.8700451,
-        lng: 80.9040876
-        },
-        creator: 'u2'
+    creator: 'u2'
+  }
+];
 
+const UserPlaces = () => {
+  const userId = useParams().userId;
+  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
+  return <PlaceList items={loadedPlaces} />;
+};
 
-}]
-const UserPlaces=()=> {
- const userId=useParams().userId;
- const loadedPlaces=DUMMY_PLACES.filter(place=>place.creator===userId)
-  return (
-    < PlaceList items={loadedPlaces}/>
-    
-    
-  )
-}
 export default UserPlaces;
