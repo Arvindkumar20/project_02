@@ -1,4 +1,4 @@
-import  { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 
 import Card from '../../shared/components/UiEement/Card';
 import Input from '../../shared/components/FormElement/Input';
@@ -11,11 +11,14 @@ import {
 import { useForm } from '../../shared/hooks/Form-hook.js';
 import { AuthContext } from '../../shared/context/auth-context.js';
 import './Auth.css';
+import ErrorModal from '../../shared/components/UiEement/ErrorModel.js';
+import LoadingSpinner from '../../shared/components/UiEement/LoadingSpinner.js'
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-
+  const [isloading,setIsLoading]=useState(false);
+const [error,setError]=useState();
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -54,13 +57,70 @@ const Auth = () => {
     setIsLoginMode(prevMode => !prevMode);
   };
 
-  const authSubmitHandler = event => {
+  const authSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);
-    auth.login();
-  };
 
+    if (isLoginMode) {
+      try {
+        setIsLoading(true)
+        const response = await fetch('http://localhost:3000/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          })
+        });
+
+        const responseData = await response.json();
+        if(!response.ok){
+throw new Error(responseData.message)
+        }
+        console.log(responseData); 
+    auth.login();
+        setIsLoading(false)
+      } catch (err) {
+       
+        setError(err.message||'something went wrong please try again')
+      }
+    } else {
+      try {
+        setIsLoading(true)
+        const response = await fetch('http://localhost:3000/api/users/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          })
+        });
+
+        const responseData = await response.json();
+        if(!response.ok){
+throw new Error(responseData.message)
+        }
+        console.log(responseData); 
+    auth.login();
+        setIsLoading(false)
+      } catch (err) {
+       
+        setError(err.message||'something went wrong please try again')
+      }
+    }
+setIsLoading(false);
+  };
+const handleError=()=>{
+  setError(null)
+}
   return (
+   <>
+   {isloading && <LoadingSpinner overlay/>}
+   <ErrorModal error={error} onClear={handleError}/>
     <Card className="authentication">
       <h2>Login Required</h2>
       <hr />
@@ -102,6 +162,7 @@ const Auth = () => {
         SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
       </Button>
     </Card>
+   </>
   );
 };
 

@@ -24,8 +24,8 @@ const DUMMY_PLACES = [
       'https://d2dzi65yjecjnt.cloudfront.net/1176384.jpeg',
     address: 'Girdharilal Mathur Rd, Telibagh, Lucknow, Uttar Pradesh 226003 · 9.7 km',
     location: {
-      lat: 26.9272441,
-      lng: 80.9725626
+      lat: 27.3521544,
+      lng: 81.0557995
     },
     creator: 'u2'
   }

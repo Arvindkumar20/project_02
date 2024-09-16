@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Avatar from '../../shared/components/UiEement/Avatar';
@@ -7,7 +6,7 @@ import './userItem.css';
 
 const UserItem = props => {
   return (
-    <li className="user-item">
+    <li className="user-item" key={props.id}>
       <Card className="user-item__content">
         <Link to={`/${props.id}/places`}>
           <div className="user-item__image">
