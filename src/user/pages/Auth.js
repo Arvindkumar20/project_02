@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 // import  {BACKEND_URI} from "../../env.js";
+// import 'dotenv/config'
 import Card from '../../shared/components/UiEement/Card';
 import Input from '../../shared/components/FormElement/Input';
 import Button from '../../shared/components/FormElement/Button';
@@ -69,7 +70,7 @@ const {isLoading,error,sendRequest,clearError}=useHttpClient();
 
     if (isLoginMode) {
       try {
-        const responseData = await sendRequest(`http://localhost:3000/api/users/login`, 'POST', JSON.stringify({
+        const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/login`, 'POST', JSON.stringify({
           email: formState.inputs.email.value,
           password: formState.inputs.password.value
         }),
@@ -77,7 +78,7 @@ const {isLoading,error,sendRequest,clearError}=useHttpClient();
                 'Content-Type': 'application/json'
               });
       //  console.log(responseData); 
-    auth.login(responseData.user._id);
+    auth.login(responseData.userId,responseData.token);
       } catch (error) {
         console.log(error);
       }
@@ -90,16 +91,16 @@ const {isLoading,error,sendRequest,clearError}=useHttpClient();
         formData.append('password',formState.inputs.password.value);
         formData.append('image',formState.inputs.image.value);
 
-        const responseData = await sendRequest(`http://localhost:3000/api/users/signup`, 'POST',
+        const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/signup`, 'POST',
          formData,
         //  {
         //     'Content-Type': 'application/json'
         //   });
         );
         // console.log(responseData); 
-    auth.login(responseData.user._id);
+    auth.login(responseData.userId,responseData.token);
       } catch (error) {
-        // console.log(error)
+        console.log(error)
       }
      
     }

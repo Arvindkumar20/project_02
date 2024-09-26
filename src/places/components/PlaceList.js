@@ -1,9 +1,7 @@
-
 import Card from '../../shared/components/UiEement/Card';
 import PlaceItem from './PlaceItem';
 import Button from '../../shared/components/FormElement/Button';
 import './PlaceList.css';
-
 const PlaceList = props => {
   if (props.items.length === 0) {
     return (
@@ -15,7 +13,6 @@ const PlaceList = props => {
       </div>
     );
   }
-
   return (
     <ul className="place-list">
       {props.items.map(place => (
@@ -34,5 +31,4 @@ const PlaceList = props => {
     </ul>
   );
 };
-
 export default PlaceList;

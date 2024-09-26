@@ -1,6 +1,6 @@
 import  { useEffect, useState,useContext } from 'react';
 import { useParams,useHistory } from 'react-router-dom';
-
+// import 'dotenv/config';
 import Input from '../../shared/components/FormElement/Input';
 import Button from '../../shared/components/FormElement/Button';
 import Card from '../../shared/components/UiEement/Card';
@@ -37,7 +37,7 @@ const {sendRequest,error,clearError,isLoading}=useHttpClient();
 useEffect(()=>{
   const fetchPlace = async () => {
   try {
-   const reseponseData=await sendRequest(`http://localhost:3000/api/places/${placeId}`);
+   const reseponseData=await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`);
    setLoadedPlace(reseponseData.place)
    setFormData(
     {
@@ -58,26 +58,22 @@ useEffect(()=>{
   }
 }
 fetchPlace();
-},[sendRequest,placeId,setFormData])
-
-
+},[sendRequest,placeId,setFormData]);
   const placeUpdateSubmitHandler = async event => {
     event.preventDefault();
 try {
- await sendRequest(`http://localhost:3000/api/places/${placeId}`,'PATCH',JSON.stringify({
+ await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,'PATCH',JSON.stringify({
     title:formState.inputs.title.value,
     description:formState.inputs.description.value
   }),
   {
-    'Content-Type':'application/json'
-  }
-);
+    'Content-Type':'application/json',
+    Authorization:'Bearer ' + auth.token
+  });
 histiry.push('/'+auth.userId+'/places');
 } catch (error) {
-  console.log(error)
-}
-
-  };
+  console.log(error);
+}};
   if (isLoading) {
     return (
       <div className="center">

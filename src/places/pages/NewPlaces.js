@@ -14,7 +14,6 @@ import { useHttpClient } from '../../shared/hooks/http-hook.js';
 import { AuthContext } from '../../shared/context/auth-context.js';
 import ImageUpload from '../../shared/components/FormElement/ImageUpload.js'
 import './PlaceForm.css';
-
 const NewPlace = () => {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -39,31 +38,27 @@ const NewPlace = () => {
     },
     false
   );
-
   const history = useHistory();
-
   const placeSubmitHandler = async event => {
     event.preventDefault();
-    const formData=new FormData();
+    const formData = new FormData();
     formData.append('title', formState.inputs.title.value);
-    formData.append('description',formState.inputs.description.value);
-    formData.append('address',formState.inputs.address.value)
-    formData.append('creator',auth.userId);
-    formData.append('image',formState.inputs.image.value);
-
+    formData.append('description', formState.inputs.description.value);
+    formData.append('address', formState.inputs.address.value)
+    // formData.append('creator',auth.userId);
+    formData.append('image', formState.inputs.image.value);
     try {
       await sendRequest(
-        'http://localhost:3000/api/places/new',
+        `${process.env.REACT_APP_BACKEND_URL}/places/new`,
         'POST',
-      formData,
-     
+        formData,
+        { Authorization: 'Bearer ' + auth.token }
       );
       history.push('/');
     } catch (err) {
       // console.log(err)
     }
   };
-
   return (
     <React.Fragment>
       <ErrorModel error={error} onClear={clearError} />
@@ -94,7 +89,7 @@ const NewPlace = () => {
           errorText="Please enter a valid address."
           onInput={inputHandler}
         />
-        <ImageUpload id='image' onInput={inputHandler} errorText="Please provide an image"/>
+        <ImageUpload id='image' onInput={inputHandler} errorText="Please provide an image" />
         <Button type="submit" disabled={!formState.isValid}>
           ADD PLACE
         </Button>
@@ -102,5 +97,4 @@ const NewPlace = () => {
     </React.Fragment>
   );
 };
-
 export default NewPlace;
